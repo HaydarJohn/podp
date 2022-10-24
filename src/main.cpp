@@ -1,41 +1,22 @@
-#include <iostream>
-
-class entity
-{
-public:
-
-entity()
-{
-	x=0 ; y= 0; z= 0;
-}
-
-	double x,y,z;
-
-	void log()
-	{
-	std::cout<<x<<" "<<y<<" "<<z<<std::endl;
-	}
-
-	void moveto(double ax,double ay,double az)
-	{
-		x=+ax; y=+ ay; z=+ az;
-	}
-
-};
-
-
+#include<iostream>
+#include"glad/glad.h"
+#include<GLFW/glfw3.h>
 
 
 int main()
 {
-	std::cout<<"main çalışıyor"<<std::endl;
+	if(!glfwInit())
+		std::cout<<"GLFW can not initialized."<<std::endl;
 
-	entity protagonist;
+	GLFWwindow* window = glfwCreateWindow(720,640,"Pass Out Day Project",NULL,NULL);
+	if(!window)
+		std::cout<<"Window could not created."<<std::endl;
 
+	while(!glfwWindowShouldClose(window))
+	{
 
-	protagonist.log();
-
-	protagonist.moveto(5,5,5);
-
-	protagonist.log();
+	}
+	glfwDestroyWindow(window);
+	
+	glfwTerminate();
 }
