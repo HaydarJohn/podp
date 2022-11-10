@@ -1,5 +1,5 @@
 all: *.cpp *.h
-	g++ *.cpp -o program -lGL -lglfw
+	g++ *.cpp -o program -lSDL2 && ./program
 
 clear:
-	rm program *.o
+	rm program

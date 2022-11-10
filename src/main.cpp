@@ -1,22 +1,14 @@
-#include<iostream>
-#include"glad/glad.h"
-#include<GLFW/glfw3.h>
-
+#include <SDL2/SDL.h>
 
 int main()
 {
-	if(!glfwInit())
-		std::cout<<"GLFW can not initialized."<<std::endl;
+	SDL_Init(SDL_INIT_EVERYTHING);
 
-	GLFWwindow* window = glfwCreateWindow(720,640,"Pass Out Day Project",NULL,NULL);
-	if(!window)
-		std::cout<<"Window could not created."<<std::endl;
+	SDL_Window* window = SDL_CreateWindow("Pass Out Day Project",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,640,480,SDL_WINDOW_SHOWN);
+	SDL_Renderer* renderer = SDL_CreateRenderer(window , -1 , 0);
+	SDL_SetRenderDrawColor(renderer , 255,0,0,255);
+	SDL_RenderClear(renderer);
+	SDL_RenderPresent(renderer);
+	SDL_Delay(5000);
 
-	while(!glfwWindowShouldClose(window))
-	{
-
-	}
-	glfwDestroyWindow(window);
-	
-	glfwTerminate();
 }
