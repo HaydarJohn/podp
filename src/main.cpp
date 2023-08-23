@@ -1,12 +1,8 @@
-#include"Game.h"
 #include<SDL2/SDL.h>
-#include<GL/glew.h>
+#include<SDL2/SDL_image.h>
 
-
-int main(int argc,const char** argv)
+int main(int argc , char* argv[])
 {
-    Game game;
-    game.run();
     
-    return 0;    
+    return 0;
 }
