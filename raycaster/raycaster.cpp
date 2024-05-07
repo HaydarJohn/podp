@@ -7,6 +7,7 @@
 #define PI 3.14159265359
 #define PI2 PI/2
 #define PI3 3*PI/2
+#define DEG_TO_RAD 0.0174532925
 
 
 float px , py , pdx , pdy ,pa;
@@ -61,11 +62,11 @@ float dist(float ax,float ay,float bx,float by,float ang)
 
 void drawRays2D()
 {
-	int r,mx,my,mp,dof; float rx,ry,ra,xo,yo;
-	ra=pa;
+	int r,mx,my,mp,dof; float rx,ry,ra,xo,yo,distT;
+	ra=pa-DEG_TO_RAD*30;  if(ra < 0) { ra+=2*PI;} if (ra > 2*PI) { ra-=2*PI;}
 
 	// Horizontal ?
-	for(r=0;r<1;r++)
+	for(r=0;r<60;r++)
 	{
 		dof=0;
 		float distH=100000,hx=px,hy=py;
@@ -99,11 +100,18 @@ void drawRays2D()
 			else{ rx+=xo; ry+=yo; dof+=1;}
 		}
 
-		if(distH > distV) { rx=vx; ry=vy; }
-		if(distH < distV) { rx=hx; ry=hy; }
+		if(distH > distV) { rx=vx; ry=vy; distT = distV;}
+		if(distH < distV) { rx=hx; ry=hy; distT = distH;}
 
 		glColor3f(1,0,0);	glLineWidth(3);	glBegin(GL_LINES);	glVertex2i(px,py);	glVertex2i(rx,ry);	glEnd();
+		ra+=DEG_TO_RAD; if(ra < 0) { ra+=2*PI;} if (ra > 2*PI) { ra-=2*PI;}
+		
+		
+		//	Draw wall
 
+		float lineH = (mapSize*320)/distT; // away little close big
+		float lineOffset = 160 - lineH/2;
+		glLineWidth(20); glBegin(GL_LINES); glVertex2i(r*8+530,lineOffset); glVertex2i(r*8+530,lineH+lineOffset); glEnd();
 	}
 	
 }
