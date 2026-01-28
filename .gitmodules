@@ -1,0 +1,3 @@
+[submodule "raycaster/freeglut"]
+	path = raycaster/freeglut
+	url = git@github.com:freeglut/freeglut.git
