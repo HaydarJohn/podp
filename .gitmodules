@@ -1,3 +1,6 @@
 [submodule "raycaster/freeglut"]
 	path = raycaster/freeglut
 	url = git@github.com:freeglut/freeglut.git
+[submodule "pong/external/glfw"]
+	path = pong/external/glfw
+	url = https://github.com/glfw/glfw.git
