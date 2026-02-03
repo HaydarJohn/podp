@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include "event.h"
+#include "log.h"
 
 //  https://www.geeksforgeeks.org/cpp/std-mutex-in-cpp/.
 //  www.geeksforgeeks.org/cpp/implementation-of-singleton-class-in-cpp/  If you want to make this singleton read this.
@@ -23,6 +24,8 @@ private:
     // WARNING: TODO: queue implementation of cpp not thread safe !!! find replacement or make your own thread safe.
     std::queue<Event> eventQueue;
     std::queue<Event> errorQueue;
+
+    Logger* logger;
 
     // This may look stupid but it is simply map of Event_type keys mapping to 
     // Every subscriber callback function that interested in that type

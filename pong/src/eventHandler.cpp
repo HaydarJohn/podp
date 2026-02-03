@@ -11,7 +11,7 @@ std::mutex EventHandler::mutex;
 
 EventHandler::EventHandler()
 {
-
+    this->logger = this->logger->getInstance();
 }
 
 EventHandler::~EventHandler()
@@ -43,6 +43,17 @@ void EventHandler::subscibeEvent(EventType type,void (*funct)(Event))
 
 bool EventHandler::processEvents()
 {
-    // TODO: implement
+
+    if(this->eventQueue.empty())    return false;
+
+    // Event event = eventQueue.front();
+    // this->logger->log(event.getLogLevel(),event.getMessage());
+    // eventQueue.pop();
+
+    // this->subscribers
+
+        
+    
+    
     return true;
 }
