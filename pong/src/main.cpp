@@ -19,18 +19,18 @@ int main()
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,GL_TRUE);
     #endif
     
-    Window window(1920,1080,"Pong");
+    Window* window = new Window(1920,1080,"Pong");
 
 
     
 
-    while (!glfwWindowShouldClose(window.getCurrentWindowContext()))
+    while (!glfwWindowShouldClose(window->getCurrentWindowContext()))
     {
         
 
 
         glfwPollEvents();
-        glfwSwapBuffers(window.getCurrentWindowContext());
+        glfwSwapBuffers(window->getCurrentWindowContext());
     }
     
     glfwTerminate();
