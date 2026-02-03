@@ -3,7 +3,7 @@
 
 #include <string>
 
-enum Event_Type
+enum class EventType
 {
     ERROR
 };
@@ -11,12 +11,12 @@ enum Event_Type
 class Event
 {
 private:
-    Event_Type type;
+    EventType type;
     std::string eventInfo;
 public:
-    Event(Event_Type type,std::string eventInfo);
+    Event(EventType type,std::string eventInfo);
     ~Event();
-    Event_Type getType();
+    EventType getType();
 };
 
 

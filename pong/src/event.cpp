@@ -1,6 +1,6 @@
 #include "event.h"
 
-Event::Event(Event_Type type,std::string eventInfo)
+Event::Event(EventType type,std::string eventInfo)
 {
     this->type = type;
     this->eventInfo = eventInfo;
@@ -9,7 +9,7 @@ Event::~Event()
 {
 
 }
-Event_Type Event::getType()
+EventType Event::getType()
 {
     return this->type;
 }

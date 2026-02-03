@@ -31,12 +31,12 @@ EventHandler* EventHandler::getInstance()
 }
 
 
-void EventHandler::pushEvent(Event_Type type,std::string eventInfo)
+void EventHandler::pushEvent(EventType type,std::string eventInfo)
 {
 
 }
 
-void EventHandler::subscibeEvent(Event_Type type,void (*funct)(Event))
+void EventHandler::subscibeEvent(EventType type,void (*funct)(Event))
 {
 
 }    

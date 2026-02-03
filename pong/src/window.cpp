@@ -13,7 +13,7 @@ Window::Window(int width,int height,const char* title)
     // TODO: Do a proper error logger and EventHandler
     if(this->window == NULL)
     {
-        EventHandler->pushEvent(ERROR,"could not create window!");
+        EventHandler->pushEvent(EventType::ERROR,"could not create window!");
         return;
     }
     glfwMakeContextCurrent(window);
@@ -23,7 +23,7 @@ Window::Window(int width,int height,const char* title)
     // Context(window) it can not get pointers so i will get glad functions every time i make new window object
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        EventHandler->pushEvent(ERROR,"Failed to get opengl functions(glad)");
+        EventHandler->pushEvent(EventType::ERROR,"Failed to get opengl functions(glad)");
         return;
     }
 }
@@ -39,7 +39,7 @@ bool Window::setResolution(int width,int height)
     if(width<160 || height < 120) // QQVGA  Resolution. Could not find smaller standart
     {
         // TODO: ERROR: Log and Inform the programmer.
-        EventHandler->pushEvent(ERROR,"Too litle resolution");
+        EventHandler->pushEvent(EventType::ERROR,"Too litle resolution");
         return true;
     }
 

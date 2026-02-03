@@ -26,7 +26,7 @@ private:
 
     // This may look stupid but it is simply map of Event_type keys mapping to 
     // Every subscriber callback function that interested in that type
-    std::map<Event_Type,std::vector<void(*)(Event)>> subscribers;
+    std::map<EventType,std::vector<void(*)(Event)>> subscribers;
 
     // This part is for singleton . Mutex ensures thread safety.
     static EventHandler* instancePtr;
@@ -45,10 +45,10 @@ public:
     static EventHandler* getInstance();
 
     // Makes internal event object and adds to queue
-    void pushEvent(Event_Type type,std::string eventInfo);
+    void pushEvent(EventType type,std::string eventInfo);
 
     // A function that takes event type and function so it can callback when that type of event Happens.
-    void subscibeEvent(Event_Type type,void (*funct)(Event));
+    void subscibeEvent(EventType type,void (*funct)(Event));
 
     bool processEvents();
 };
