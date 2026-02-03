@@ -16,7 +16,7 @@ EventHandler::EventHandler()
 
 EventHandler::~EventHandler()
 {
-
+    delete this->instancePtr;
 }
 
 EventHandler* EventHandler::getInstance()
