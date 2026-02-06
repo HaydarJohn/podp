@@ -40,3 +40,12 @@ std::string readFile(std::string filePath)
     is.close();
     return test;
 }
+
+/*
+    // AI Said line by line gives an performance hit so it gived this and i tries temporarly and it did not give any errors!
+    // Dont forget to include sstream
+std::ifstream file("example.txt");
+std::stringstream buffer;
+buffer << file.rdbuf(); // Read the entire file buffer into the stream
+std::string content = buffer.str();
+*/
