@@ -32,9 +32,9 @@ std::string readFile(std::string filePath)
     std::string test;
     while (is.get(c))          // loop getting single characters
     {
-        // std::cout << c;      // for debugging ?
+        // std::cout << c;      // for debugging
         test.push_back(c);
     }
-    printHex(test.c_str());
+    // printHex(test.c_str()); // for debugging
     return test;
 }
