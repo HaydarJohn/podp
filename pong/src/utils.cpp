@@ -36,5 +36,7 @@ std::string readFile(std::string filePath)
         test.push_back(c);
     }
     // printHex(test.c_str()); // for debugging
+
+    is.close();
     return test;
 }
