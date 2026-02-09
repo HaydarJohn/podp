@@ -11,6 +11,9 @@
 //  https://www.geeksforgeeks.org/cpp/queue-cpp-stl/
 
 
+EventHandler* eventHandler= eventHandler->getInstance();
+
+
 
 // TODO: Maybe implement proper event class so you can assign log levels to events. 
 
