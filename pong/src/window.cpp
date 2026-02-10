@@ -1,7 +1,7 @@
 #include "eventHandler.h"
 #include "window.h"
 
-
+static EventHandler* eventHandler = EventHandler::getInstance(); //static so only this cpp file can see it.
 
 Window::Window(int width,int height,const char* title)
 {

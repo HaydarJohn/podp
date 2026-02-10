@@ -10,11 +10,6 @@
 //  www.geeksforgeeks.org/cpp/implementation-of-singleton-class-in-cpp/  If you want to make this singleton read this.
 //  https://www.geeksforgeeks.org/cpp/queue-cpp-stl/
 
-
-EventHandler* eventHandler= eventHandler->getInstance();
-
-
-
 // TODO: Maybe implement proper event class so you can assign log levels to events. 
 
 class EventHandler
