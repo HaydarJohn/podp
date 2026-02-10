@@ -42,3 +42,7 @@ PS. [Yeah it does](https://wiki.libsdl.org/SDL3/READMEs). But when you are under
 
 Yeah thats it. continue in glfw until you hit a roadblock
 
+## 10.02.2026
+
+So i took a break from feature branch to opengl branch because i felt stuck. I felt like i was cornering myself with unusable unmaintanable code. So i just read and did what [openglBook](https://learnopengl.com/Getting-started/Hello-Triangle) said and drew a trianlge for accomplishment feelings. I asked around for help about designing a game engine (Nobody in my Department works on graphics. Not even 1 assistant.) i got nowhere. And one of my friend said "Bro making a game engine is a huge project. You need to grasp concept of OOP beforehand. Read design patters book." And i took his advice and did not read the book :D. I read Head first OOAD first because i lack basic concepts for OOP i think. And with that i will port my opengl branch to feature branch. If its possible.
+
