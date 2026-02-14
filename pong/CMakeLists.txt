@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/glfw)
+add_subdirectory(external/sdl3)
 
 # Add the GLM directory
 add_subdirectory(external/glm)
@@ -20,12 +21,12 @@ add_library(GLAD external/glad/src/glad.c)
 target_include_directories(GLAD PUBLIC external/glad/include)
 
 # 4. Create your executable
-add_executable(${PROJECT_NAME} src/main.cpp src/window.cpp src/event.cpp src/eventHandler.cpp src/log.cpp src/utils.cpp src/engine.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/windowSDL.cpp src/event.cpp src/eventHandler.cpp src/log.cpp src/utils.cpp src/engine.cpp)
 
 # 5. Link everything
 # GLFW creates a target named 'glfw'
 # TODO: LEARN: WARNING: I dont know why i had to do glm::glm.
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw GLAD glm::glm ${CMAKE_DL_LIBS})
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw GLAD glm::glm SDL3-static ${CMAKE_DL_LIBS})
 
 # Ensure headers can be found
-target_include_directories(${PROJECT_NAME} PRIVATE external/glfw/include external/glad/include glm)
+target_include_directories(${PROJECT_NAME} PRIVATE external/glfw/include external/sdl3/include external/glad/include glm)

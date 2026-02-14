@@ -7,3 +7,6 @@
 [submodule "pong/external/glm"]
 	path = pong/external/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "pong/external/sdl3"]
+	path = pong/external/sdl3
+	url = https://github.com/libsdl-org/SDL.git
