@@ -8,6 +8,7 @@ private:
     /* data */
     Window* window;
 
+    void m_init();
 public:
     Engine(/* args */);
     ~Engine();
