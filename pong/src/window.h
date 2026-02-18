@@ -14,6 +14,7 @@ private:
     GLFWwindow* window;
     glm::uvec2* resolution;
     const char* title;
+    EventHandler* EventHandler;
 public:
     Window(int width,int height,const char* title);
     ~Window();
