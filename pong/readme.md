@@ -49,3 +49,9 @@ So i took a break from feature branch to opengl branch because i felt stuck. I f
 ## 11.02.2026
 
 I now need to implement collision detection between ball and paddles. But realized if i do collison brute force then my collision checks will grow exponential with it. formula is n*(n-1)/2  so O(n^2). After that I watched [this](https://www.youtube.com/watch?v=eED4bSkYCB8) youtube video and now i know some algorithms to fix these issue. I need to study data structures and algorithms. With that the books i need to make a game engine incresed to 6 books. I hate my life ![Stewie crayz](https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3Y4dXM2NmJ1OW5kdDR5d3V4cWgzMjJ3NjRlYmg5c2pjODR5aHA4MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jN86rcdOyrpyo/giphy.gif)
+
+## 18.02.2026
+
+Yeah I got stuckt structuring project for an engine so i will yolo it and continue stucturint it with [HadrianusEngine](https://github.com/HaydarJohn/HadrianusEngine)   
+Unrelated but look at this meme I chuckle a lot for this. This is stupidly funny   
+![Pin meme](https://imgs.xkcd.com/comics/pinouts.png)
