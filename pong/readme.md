@@ -55,3 +55,7 @@ I now need to implement collision detection between ball and paddles. But realiz
 Yeah I got stuckt structuring project for an engine so i will yolo it and continue stucturint it with [HadrianusEngine](https://github.com/HaydarJohn/HadrianusEngine)   
 Unrelated but look at this meme I chuckle a lot for this. This is stupidly funny   
 ![Pin meme](https://imgs.xkcd.com/comics/pinouts.png)
+
+
+So after 4-5 Hours  I could not even do Cmake with desired project structure let alone design the game engine. So i will do here trial and error.
+![Yeah meme](https://imgs.xkcd.com/comics/journal_4.png)
