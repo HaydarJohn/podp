@@ -20,7 +20,7 @@ add_library(GLAD external/glad/src/glad.c)
 target_include_directories(GLAD PUBLIC external/glad/include)
 
 # 4. Create your executable
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/utils.cpp)
 
 # 5. Link everything
 # GLFW creates a target named 'glfw'
