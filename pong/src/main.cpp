@@ -2,8 +2,12 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <iostream>
+#include <random>
 #include "main.h"
 #include "utils.h"
+#include "ball.h"
+#include "paddle.h"
+
 
 
 
@@ -123,17 +127,40 @@ int main()
         std::cout << "ERROR::SHADER::LINK::LINKING_FAILED\n" << "start of infolog \n"<< infoLog << "end of infolog"<<std::endl;
     }
 
+    // Random Setup . Yoinked from stack overflow.
+    std::random_device dev;
+    std::mt19937 rnJesus(dev());
+    std::uniform_real_distribution<float> randFloat(0.0f,1.0f); // distribution in range [0, 1]
+
+    Paddle* left = new Paddle(0,0.1,0.3);
+    Paddle* right = new Paddle(1,0.1,0.3);
+    Ball* ball = new Ball(0.2);
     
     
     while (!glfwWindowShouldClose(window))
     {
+        // Take input
+
+        // Before Rendering Logic
+        if(left->checkCollide(ball) || right->checkCollide(ball))
+        {
+            ball->vx *= -1.01f;
+            ball->vy += randFloat(rnJesus);
+        }
+
+        // Rendering 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
+        
         glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
+        drawRect(ball->getIndecies(),VBO,VAO,EBO);
+        drawRect(left->getIndecies(),VBO,VAO,EBO);
+        drawRect(right->getIndecies(),VBO,VAO,EBO);
+
+        // glBindVertexArray(VAO);
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // glBindVertexArray(0);
 
         glfwPollEvents();
         glfwSwapBuffers(window);
@@ -151,4 +178,20 @@ int main()
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+}
+
+
+void drawRect(float* rect,unsigned int VBO,unsigned int VAO,unsigned int EBO)
+{
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);  
+    glBufferData(GL_ARRAY_BUFFER, sizeof(*rect), rect, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW); 
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0);
+    glEnableVertexAttribArray(0);   
+
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }
