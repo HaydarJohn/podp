@@ -19,7 +19,7 @@ float vertices[] = {
     -0.5f,  0.5f, 0.0f   // top left 
 };
 unsigned int indices[] = {  // note that we start from 0!
-    0, 1, 3,   // first triangle
+    0, 1, 2,   // first triangle
     1, 2, 3    // second triangle
 };
 
@@ -74,9 +74,9 @@ int main()
     glGenVertexArrays(1,&VAO);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);  
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); 
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW); 
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0);
     glEnableVertexAttribArray(0);
     
@@ -132,14 +132,32 @@ int main()
     std::mt19937 rnJesus(dev());
     std::uniform_real_distribution<float> randFloat(0.0f,1.0f); // distribution in range [0, 1]
 
-    Paddle* left = new Paddle(0,0.1,0.3);
-    Paddle* right = new Paddle(1,0.1,0.3);
-    Ball* ball = new Ball(0.2);
     
+    
+    Paddle* left    = new Paddle(0,0.05f,0.5f);
+    Paddle* right   = new Paddle(1,0.05f,0.5f);
+    Ball* ball = new Ball(0.1);
+    
+    // Opengl Setup ? Still dont get it
+    unsigned int VBO1[3];
+    unsigned int VAO1[3];
+    glGenBuffers(3, VBO1);
+    glGenVertexArrays(3,VAO1);
+    for (int i = 0; i < 3; i++)
+    {
+        glBindVertexArray(VAO1[i]);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO1[i]);  
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW); 
+        glEnableVertexAttribArray(0);
+    }
     
     while (!glfwWindowShouldClose(window))
     {
         // Take input
+        glfwPollEvents();
 
         // Before Rendering Logic
         if(left->checkCollide(ball) || right->checkCollide(ball))
@@ -147,22 +165,23 @@ int main()
             ball->vx *= -1.01f;
             ball->vy += randFloat(rnJesus);
         }
-
+        ball->update();
         // Rendering 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
         
         glUseProgram(shaderProgram);
-        drawRect(ball->getIndecies(),VBO,VAO,EBO);
-        drawRect(left->getIndecies(),VBO,VAO,EBO);
-        drawRect(right->getIndecies(),VBO,VAO,EBO);
+        drawRect(ball->getIndecies() ,VBO1[0],VAO1[0]);
+        drawRect(left->getIndecies() ,VBO1[1],VAO1[1]);
+        drawRect(right->getIndecies(),VBO1[2],VAO1[2]);
+        // std::cout<<"A new Frame\n";
 
         // glBindVertexArray(VAO);
         // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0);
 
-        glfwPollEvents();
+        
         glfwSwapBuffers(window);
     }
     
@@ -181,17 +200,12 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 }
 
 
-void drawRect(float* rect,unsigned int VBO,unsigned int VAO,unsigned int EBO)
+void drawRect(float* rect,unsigned int VBO,unsigned int VAO)
 {
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);  
-    glBufferData(GL_ARRAY_BUFFER, sizeof(*rect), rect, GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW); 
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0);
-    glEnableVertexAttribArray(0);   
-
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*12, rect, GL_DYNAMIC_DRAW);
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+
 }

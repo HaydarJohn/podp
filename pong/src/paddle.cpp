@@ -7,8 +7,8 @@ Paddle::Paddle(bool side,float width,float height)
     this->side =side;
     this->width = width;
     this->height = height;
-    this->x = 0.02; // Left Paddle
-    if(side == 1) this->x = 1 - this->x;    // Right Paddle
+    this->x = -0.7; // Left Paddle
+    if(side == 1) this->x *= -1;    // Right Paddle
 }
 
 Paddle::~Paddle()

@@ -1,11 +1,10 @@
 #pragma once
-#include <ctime>
 
 class Ball
 {
 private:
     float rect[12];
-    time_t lastTick;
+    double lastTick;
 public:
     float size; // As a radius (Yaricap)
     float x,y,vx,vy;
