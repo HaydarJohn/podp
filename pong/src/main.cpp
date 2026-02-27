@@ -130,12 +130,13 @@ int main()
     // Random Setup . Yoinked from stack overflow.
     std::random_device dev;
     std::mt19937 rnJesus(dev());
-    std::uniform_real_distribution<float> randFloat(0.0f,1.0f); // distribution in range [0, 1]
+    std::uniform_real_distribution<float> randFloat(-1.0f,1.0f); // distribution in range [0, 1]
 
-    
-    
-    Paddle* left    = new Paddle(0,0.05f,0.5f);
-    Paddle* right   = new Paddle(1,0.05f,0.5f);
+    // Set Input Function
+        glfwSetKeyCallback(window, keyCallback);
+
+    Paddle* left    = new Paddle(0,0.05f,0.3f);
+    Paddle* right   = new Paddle(1,0.05f,0.3f);
     Ball* ball = new Ball(0.1);
     
     // Opengl Setup ? Still dont get it
@@ -157,13 +158,31 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         // Take input
-        glfwPollEvents();
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            left->y += 0.02;
+            if((left->y + left->height/2)> 1) left->y = 1 - left->height/2;
+        }
+        else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            left->y -= 0.02;
+            if(left->y -(left->height/2) < -1) left->y = -1+  left->height/2;
+        }
+        else;
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+            right->y += 0.02;
+            if((right->y + (right->height/2))> 1) right->y = 1 -(right->height/2);
+
+        }
+        else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+            right->y -= 0.02;
+            if(right->y -(right->height/2) < -1) right->y = -1+  right->height/2;
+        }
+        else;
 
         // Before Rendering Logic
         if(left->checkCollide(ball) || right->checkCollide(ball))
         {
-            ball->vx *= -1.01f;
-            ball->vy += randFloat(rnJesus);
+            ball->vx *= -1.1f;
+            ball->vy = ball->vx * randFloat(rnJesus);
         }
         ball->update();
         // Rendering 
@@ -183,6 +202,8 @@ int main()
 
         
         glfwSwapBuffers(window);
+        glfwPollEvents();
+
     }
     
 
@@ -208,4 +229,10 @@ void drawRect(float* rect,unsigned int VBO,unsigned int VAO)
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+}
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, GLFW_TRUE); // Close on Escape
+    }
 }

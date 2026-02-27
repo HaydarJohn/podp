@@ -16,7 +16,7 @@ Ball::Ball(float size)
     this->ok = 0;
     this->x = 0;
     this->y = 0;
-    this->vx = 5.0f;
+    this->vx = 10.0f;
     this->vy = 5.0f;
     this->lastTick = glfwGetTime();
 }
@@ -37,20 +37,28 @@ void Ball::update()
         this->x = 0;
         this->y = 0;
         std::cout<<wasd<<" - "<<++ok<<"\n";
-        this->vx = -5.0f;
-        this->vy = randFloat(rnJesus) * this->vx;
+        this->vx = -10.0f;
+        this->vy = randFloat(rnJesus) * this->vy;
     }
     if((this->x + (this->size / 2)) > 1)
     {
         this->x = 0;
         this->y = 0;
         std::cout<<++wasd<<" - "<<ok<<"\n";
-        this->vx = 5.0f;
-        this->vy = randFloat(rnJesus) * this->vx;
+        this->vx = 10.0f;
+        this->vy = randFloat(rnJesus) * this->vy;
 
     }
-    if(this->y - (this->size / 2) < -1) this->vy *= -1;
-    if(this->y + (this->size / 2) > 1) this->vy *= -1;
+    if(this->y - (this->size / 2) < -0.95f) 
+    {
+        this->vy *= -1;
+        this->y  += 0.01;
+    }
+    if(this->y + (this->size / 2) > 0.95f)
+    {
+        this->vy *= -1;
+        this->y  -= 0.01;
+    }
 
     this->x += this->vx * dt;
     this->y += this->vy * dt;
