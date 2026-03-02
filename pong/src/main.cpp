@@ -61,9 +61,9 @@ int main()
         return -1;
     }
 
-    std::string fileRead = readFile("../src/test.vert");
+    std::string fileRead = getShaderSource("vertex");
     const char* vertexShaderSource = fileRead.c_str();
-    std::string fileRead1 = readFile("../src/test.frag");
+    std::string fileRead1 = getShaderSource("fragment");
     const char* fragmentShaderSource = fileRead1.c_str();
 
     unsigned int VBO;
