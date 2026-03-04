@@ -1,6 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <soloud.h>
+#include <soloud_wav.h>
 #include <iostream>
 #include <random>
 #include "main.h"
@@ -127,6 +129,17 @@ int main()
         std::cout << "ERROR::SHADER::LINK::LINKING_FAILED\n" << "start of infolog \n"<< infoLog << "end of infolog"<<std::endl;
     }
 
+    // Initilize sound
+    SoLoud::Soloud soloud;
+    SoLoud::Wav music;
+    SoLoud::Wav hit;
+    soloud.init();
+
+    music.load("assets/music.mp3");
+    hit.load("assets/hit.mp3");
+
+    music.setLooping(true);
+
     // Random Setup . Yoinked from stack overflow.
     std::random_device dev;
     std::mt19937 rnJesus(dev());
@@ -154,7 +167,9 @@ int main()
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW); 
         glEnableVertexAttribArray(0);
     }
+
     
+    soloud.playBackground(music);
     while (!glfwWindowShouldClose(window))
     {
         // Take input
@@ -183,6 +198,7 @@ int main()
         {
             ball->vx *= -1.1f;
             ball->vy = ball->vx * randFloat(rnJesus);
+            soloud.play(hit);
         }
         ball->update();
         // Rendering 
