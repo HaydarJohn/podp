@@ -60,6 +60,14 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/glfw)
 
+# Add SoLoud
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+set(SOLOUD_STATIC ON CACHE BOOL "" FORCE)
+set(SOLOUD_BACKEND_COREAUDIO ON CACHE BOOL "" FORCE)
+set(SOLOUD_BACKEND_NULL OFF CACHE BOOL "" FORCE)
+set(SOLOUD_BACKEND_SDL2 OFF CACHE BOOL "" FORCE)
+add_subdirectory(external/soloud/contrib)
+
 # Add the GLM directory
 add_subdirectory(external/glm)
 
@@ -71,7 +79,7 @@ target_include_directories(GLAD PUBLIC external/glad/include)
 add_executable(${PROJECT_NAME} src/main.cpp src/utils.cpp src/paddle.cpp src/ball.cpp)
 
 # 7. Link everything
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw GLAD glm::glm ${CMAKE_DL_LIBS})
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw GLAD glm::glm ${CMAKE_DL_LIBS} soloud)
 
 # Ensure headers can be found
 target_include_directories(${PROJECT_NAME} PRIVATE 
@@ -79,4 +87,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/external/glad/include 
     ${CMAKE_SOURCE_DIR}/external/glm
     ${CMAKE_SOURCE_DIR}/external/shaders
+    ${CMAKE_SOURCE_DIR}/external/soloud/include
 )

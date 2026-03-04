@@ -7,3 +7,6 @@
 [submodule "pong/external/glm"]
 	path = pong/external/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "pong/external/soloud"]
+	path = pong/external/soloud
+	url = https://github.com/jarikomppa/soloud.git
