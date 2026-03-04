@@ -1,49 +1,65 @@
 #include <iostream>
 #include <fstream>
+#include <filesystem>
+#include "utils.h"
+
+#ifdef PONGPONG_EMBED_SHADERS
+#include "shaders.h"
+#endif
 
 void printHex(const char* str) {
     if (!str) return;
 
     int i = 0;
-    // Loop until we find the null terminator
-    // The loop body runs one extra time for the null terminator itself
     while (true) {
         unsigned char c = static_cast<unsigned char>(str[i]);
-
-        // std::hex says cout hey it is hex values.
-        // setw makes width 2 for every variable after that.
-        // setfill makes it so it puts 0 before paddings. so with that 4 becomes 04
-        // putting space for readabilty for every hex value.
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)c << " ";
-
-        // Break after printing the null terminator (00)
         if (str[i] == '\0') {
             break;
         }
         i++;
     }
-    std::cout << std::dec << std::endl; // Reset to decimal for future prints
+    std::cout << std::dec << std::endl;
 }
 
 std::string readFile(std::string filePath)
 {
-    std::ifstream is(filePath);     // open file
+    std::ifstream is(filePath);
     char c;
     std::string test;
-    while (is.get(c))          // loop getting single characters
+    while (is.get(c))
     {
         test.push_back(c);
     }
-
     is.close();
     return test;
 }
 
-/*
-    // AI Said line by line gives an performance hit so it gived this and i tries temporarly and it did not give any errors!
-    // Dont forget to include sstream
-std::ifstream file("example.txt");
-std::stringstream buffer;
-buffer << file.rdbuf(); // Read the entire file buffer into the stream
-std::string content = buffer.str();
-*/
+std::string getShaderSource(const std::string& shaderName)
+{
+#ifdef PONGPONG_EMBED_SHADERS
+    // Release mode: use embedded shaders
+    if (shaderName == "vertex") {
+        return std::string(VERT_SHADER);
+    } else if (shaderName == "fragment") {
+        return std::string(FRAG_SHADER);
+    }
+    return "";
+#else
+    // Debug mode: load from files relative to executable location
+    // Get the directory where the executable is located
+    std::filesystem::path exePath = std::filesystem::current_path();
+    
+    // Go up two directories: from build/debug/pong to pong/
+    std::filesystem::path basePath = exePath.parent_path().parent_path();
+    
+    std::string fullPath;
+    if (shaderName == "vertex") {
+        fullPath = (basePath / "src" / "test.vert").string();
+    } else if (shaderName == "fragment") {
+        fullPath = (basePath / "src" / "test.frag").string();
+    }
+    
+    return readFile(fullPath);
+#endif
+}

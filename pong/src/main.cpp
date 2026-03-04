@@ -2,8 +2,12 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <iostream>
+#include <random>
 #include "main.h"
 #include "utils.h"
+#include "ball.h"
+#include "paddle.h"
+
 
 
 
@@ -15,7 +19,7 @@ float vertices[] = {
     -0.5f,  0.5f, 0.0f   // top left 
 };
 unsigned int indices[] = {  // note that we start from 0!
-    0, 1, 3,   // first triangle
+    0, 1, 2,   // first triangle
     1, 2, 3    // second triangle
 };
 
@@ -57,9 +61,9 @@ int main()
         return -1;
     }
 
-    std::string fileRead = readFile("../src/test.vert");
+    std::string fileRead = getShaderSource("vertex");
     const char* vertexShaderSource = fileRead.c_str();
-    std::string fileRead1 = readFile("../src/test.frag");
+    std::string fileRead1 = getShaderSource("fragment");
     const char* fragmentShaderSource = fileRead1.c_str();
 
     unsigned int VBO;
@@ -70,9 +74,9 @@ int main()
     glGenVertexArrays(1,&VAO);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);  
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); 
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW); 
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0);
     glEnableVertexAttribArray(0);
     
@@ -123,20 +127,83 @@ int main()
         std::cout << "ERROR::SHADER::LINK::LINKING_FAILED\n" << "start of infolog \n"<< infoLog << "end of infolog"<<std::endl;
     }
 
+    // Random Setup . Yoinked from stack overflow.
+    std::random_device dev;
+    std::mt19937 rnJesus(dev());
+    std::uniform_real_distribution<float> randFloat(-1.0f,1.0f); // distribution in range [0, 1]
+
+    // Set Input Function
+        glfwSetKeyCallback(window, keyCallback);
+
+    Paddle* left    = new Paddle(0,0.05f,0.3f);
+    Paddle* right   = new Paddle(1,0.05f,0.3f);
+    Ball* ball = new Ball(0.1);
     
+    // Opengl Setup ? Still dont get it
+    unsigned int VBO1[3];
+    unsigned int VAO1[3];
+    glGenBuffers(3, VBO1);
+    glGenVertexArrays(3,VAO1);
+    for (int i = 0; i < 3; i++)
+    {
+        glBindVertexArray(VAO1[i]);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO1[i]);  
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW); 
+        glEnableVertexAttribArray(0);
+    }
     
     while (!glfwWindowShouldClose(window))
     {
+        // Take input
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            left->y += 0.02;
+            if((left->y + left->height/2)> 1) left->y = 1 - left->height/2;
+        }
+        else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            left->y -= 0.02;
+            if(left->y -(left->height/2) < -1) left->y = -1+  left->height/2;
+        }
+        else;
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+            right->y += 0.02;
+            if((right->y + (right->height/2))> 1) right->y = 1 -(right->height/2);
+
+        }
+        else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+            right->y -= 0.02;
+            if(right->y -(right->height/2) < -1) right->y = -1+  right->height/2;
+        }
+        else;
+
+        // Before Rendering Logic
+        if(left->checkCollide(ball) || right->checkCollide(ball))
+        {
+            ball->vx *= -1.1f;
+            ball->vy = ball->vx * randFloat(rnJesus);
+        }
+        ball->update();
+        // Rendering 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
+        
         glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
+        drawRect(ball->getIndecies() ,VBO1[0],VAO1[0]);
+        drawRect(left->getIndecies() ,VBO1[1],VAO1[1]);
+        drawRect(right->getIndecies(),VBO1[2],VAO1[2]);
+        // std::cout<<"A new Frame\n";
 
-        glfwPollEvents();
+        // glBindVertexArray(VAO);
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // glBindVertexArray(0);
+
+        
         glfwSwapBuffers(window);
+        glfwPollEvents();
+
     }
     
 
@@ -151,4 +218,21 @@ int main()
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+}
+
+
+void drawRect(float* rect,unsigned int VBO,unsigned int VAO)
+{
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);  
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*12, rect, GL_DYNAMIC_DRAW);
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+}
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, GLFW_TRUE); // Close on Escape
+    }
 }
