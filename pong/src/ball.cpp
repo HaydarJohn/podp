@@ -1,6 +1,8 @@
 #include <iostream>
 #include <random>
 #include <GLFW/glfw3.h>
+#include <soloud.h>
+#include <soloud_wav.h>
 #include "ball.h"
 
 
@@ -26,7 +28,7 @@ Ball::~Ball()
 }
 
 
-void Ball::update()
+void Ball::update(SoLoud::Soloud* player,SoLoud::Wav* sfx)
 {
     double currentTime = glfwGetTime();
     float dt = ((currentTime - this->lastTick) / 25.0f);
@@ -39,6 +41,7 @@ void Ball::update()
         std::cout<<wasd<<" - "<<++ok<<"\n";
         this->vx = -10.0f;
         this->vy = randFloat(rnJesus) * this->vy;
+        player->play(sfx[1]);
     }
     if((this->x + (this->size / 2)) > 1)
     {
@@ -47,17 +50,20 @@ void Ball::update()
         std::cout<<++wasd<<" - "<<ok<<"\n";
         this->vx = 10.0f;
         this->vy = randFloat(rnJesus) * this->vy;
-
+        player->play(sfx[1]);
     }
     if(this->y - (this->size / 2) < -0.95f) 
     {
         this->vy *= -1;
         this->y  += 0.01;
+        player->play(sfx[0]);
+
     }
     if(this->y + (this->size / 2) > 0.95f)
     {
         this->vy *= -1;
         this->y  -= 0.01;
+        player->play(sfx[0]);
     }
 
     this->x += this->vx * dt;

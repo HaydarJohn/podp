@@ -1,5 +1,8 @@
 #pragma once
 
+namespace SoLoud{class Soloud;class Wav;}
+
+
 class Ball
 {
 private:
@@ -13,6 +16,6 @@ public:
 
     Ball(float size);
     ~Ball();
-    void update();
+    void update(SoLoud::Soloud* player,SoLoud::Wav* sfx);
     float* getIndecies();
 };

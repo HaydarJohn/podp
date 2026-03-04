@@ -132,11 +132,12 @@ int main()
     // Initilize sound
     SoLoud::Soloud soloud;
     SoLoud::Wav music;
-    SoLoud::Wav hit;
+    SoLoud::Wav sfx[2];
     soloud.init();
 
     music.load("assets/music.mp3");
-    hit.load("assets/hit.mp3");
+    sfx[0].load("assets/hit.mp3");
+    sfx[1].load("assets/goal.mp3");
 
     music.setLooping(true);
 
@@ -198,9 +199,9 @@ int main()
         {
             ball->vx *= -1.1f;
             ball->vy = ball->vx * randFloat(rnJesus);
-            soloud.play(hit);
+            soloud.play(sfx[0]);
         }
-        ball->update();
+        ball->update(&soloud,sfx);
         // Rendering 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
