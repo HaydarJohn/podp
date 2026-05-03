@@ -17,9 +17,16 @@
 #define DEG_TO_RAD 0.0174532925
 
 
+/*
+	Player X
+	Player Y
+	Player Delta X
+	Player Delta Y
+	Player angle
+*/
 float px , py , pdx , pdy ,pa;
 
-int mapX = 8 , mapY = 8 , mapSize = 64;
+int mapX = 8 , mapY = 8 , mapSize = 64;	// Constants. Dont Change After Initilization.
 int map[]=
 {
  1,1,1,1,1,1,1,1,
@@ -33,7 +40,13 @@ int map[]=
 };
 
 
-
+/*
+	This is the core function of just drawing map tiles in the left.
+	This does not contain any raycasting or other information.
+	This is coded after player drawing and movement.
+	xo : X offset
+	yo : Y offset
+*/
 void drawMap2D()
 {
 	int x,y,xo,yo;
@@ -48,6 +61,7 @@ void drawMap2D()
 			glBegin(GL_QUADS);
 
 
+			// We add and subtract 1 pixel so we can se lines.
 			glVertex2i(xo+1			,yo+1			);
 			glVertex2i(xo+1			,yo+mapSize-1	);
 			glVertex2i(xo+mapSize-1	,yo+mapSize-1	);
@@ -61,16 +75,52 @@ void drawMap2D()
 	}
 }
 
+
+// √(x^2 + y^2)
 float dist(float ax,float ay,float bx,float by,float ang)
 {
 	return  sqrt((bx-ax)*(bx-ax)+(by-ay)*(by-ay));
 }
 
 
+
+/*
+	This function is meat and bone of all this codebase.
+	TODO: Understant this magic and document.
+	TODO: Remove leftover debug prints
+*/
 void drawRays2D()
 {
+	/*
+		Ray Num
+		Map X
+		Map Y
+		Map Position
+		Depth Of Field
+		Ray X
+		Ray Y
+		Ray angle
+		X offset
+		Y offset
+		Distance Total
+	*/
 	int r,mx,my,mp,dof; float rx,ry,ra,xo,yo,distT;
-	ra=pa-DEG_TO_RAD*30;  if(ra < 0) { ra+=2*PI;} if (ra > 2*PI) { ra-=2*PI;}
+
+
+	// Math works with radian. We started our rays from 30 degrees counter clockwise. 
+	// if our FOV 60 degrees it means we see equal amount both left and right
+	ra=pa-DEG_TO_RAD*30; 
+
+
+	// If more than 2 pi or less than 0 reset to nice number.
+	if(ra < 0)
+	{
+		ra+=2*PI;
+	}
+	if (ra > 2*PI)
+	{
+		ra-=2*PI;
+	}
 
 	// Horizontal ?
 	for(r=0;r<60;r++)
@@ -118,12 +168,22 @@ void drawRays2D()
 
 		float lineH = (mapSize*320)/distT; // away little close big
 		float lineOffset = 160 - lineH/2;
-		glLineWidth(20); glBegin(GL_LINES); glVertex2i(r*8+530,lineOffset); glVertex2i(r*8+530,lineH+lineOffset); glEnd();
+		glLineWidth(20); 
+		glBegin(GL_LINES);
+		glVertex2i(r*8+530,lineOffset); 
+		glVertex2i(r*8+530,lineH+lineOffset); 
+		glEnd();
 	}
 	
 }
 
 
+
+/*
+	This is the first function that is coded. Logic is simple.
+	Draw player at coordinates below as a square.
+	Buttons change global variables for player so we just draw it.
+*/
 void drawPlayer2D()
 {
 	glColor3f(1,1,0);
@@ -140,6 +200,10 @@ void drawPlayer2D()
 	glEnd();
 }
 
+
+/*
+	Nothing fancy. Press button if pressed change value.
+*/
 void buttons(unsigned char key, int x ,int y)
 {
 	if(key == 'a')
@@ -172,6 +236,11 @@ void buttons(unsigned char key, int x ,int y)
 
 }
 
+/*
+	This is the main Display function. 
+	Order matters because it is drawn FIFO.
+	First things get drawn. Next draw command draws over it.
+*/
 void display()
 {   
  	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
@@ -181,7 +250,10 @@ void display()
 	glutSwapBuffers();  
 }
 
-
+/*
+	Setting basic global values.
+	Nothing fancy.
+*/
 void init()
 {
 	px = 300;
